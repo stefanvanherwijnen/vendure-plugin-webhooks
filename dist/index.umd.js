@@ -58,14 +58,20 @@
         constructor(orderService) {
             this.orderService = orderService;
         }
-        paymentSettle(ctx, id) {
-            this.orderService.settlePayment(ctx, id);
+        // @Get()
+        // findAll(@Ctx() ctx: RequestContext) {
+        //     return 'ok'
+        // }
+        paymentSettle(ctx, orderId) {
+            this.orderService.getOrderPayments(ctx, orderId).then(payments => {
+                payments.forEach(payment => this.orderService.settlePayment(ctx, payment.id));
+            });
             return 'Notified';
         }
     };
     __decorate([
-        common.Get('payments/:id'),
-        __param(0, core.Ctx()), __param(1, common.Param('id'))
+        common.Get('orders/:orderId/settle'),
+        __param(0, core.Ctx()), __param(1, common.Param('orderId'))
     ], WebhooksController.prototype, "paymentSettle", null);
     WebhooksController = __decorate([
         common.Controller('webhooks')
@@ -77,6 +83,7 @@
         core.VendurePlugin({
             imports: [core.PluginCommonModule],
             controllers: [WebhooksController],
+            providers: [core.OrderService],
         })
     ], exports.WebhooksPlugin);
 

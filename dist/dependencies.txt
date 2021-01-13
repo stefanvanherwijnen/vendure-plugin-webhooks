@@ -1,5 +1,5 @@
 Name: tslib
-Version: 2.0.3
+Version: 1.14.1
 License: 0BSD
 Private: false
 Description: Runtime library for TypeScript helper functions

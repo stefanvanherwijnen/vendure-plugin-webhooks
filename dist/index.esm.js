@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-import { Ctx, VendurePlugin, PluginCommonModule } from '@vendure/core';
+import { Ctx, VendurePlugin, PluginCommonModule, OrderService } from '@vendure/core';
 import { Get, Param, Controller } from '@nestjs/common';
 
 /*! *****************************************************************************
@@ -55,14 +55,20 @@ let WebhooksController = class WebhooksController {
     constructor(orderService) {
         this.orderService = orderService;
     }
-    paymentSettle(ctx, id) {
-        this.orderService.settlePayment(ctx, id);
+    // @Get()
+    // findAll(@Ctx() ctx: RequestContext) {
+    //     return 'ok'
+    // }
+    paymentSettle(ctx, orderId) {
+        this.orderService.getOrderPayments(ctx, orderId).then(payments => {
+            payments.forEach(payment => this.orderService.settlePayment(ctx, payment.id));
+        });
         return 'Notified';
     }
 };
 __decorate([
-    Get('payments/:id'),
-    __param(0, Ctx()), __param(1, Param('id'))
+    Get('orders/:orderId/settle'),
+    __param(0, Ctx()), __param(1, Param('orderId'))
 ], WebhooksController.prototype, "paymentSettle", null);
 WebhooksController = __decorate([
     Controller('webhooks')
@@ -74,6 +80,7 @@ WebhooksPlugin = __decorate([
     VendurePlugin({
         imports: [PluginCommonModule],
         controllers: [WebhooksController],
+        providers: [OrderService],
     })
 ], WebhooksPlugin);
 
