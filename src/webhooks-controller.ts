@@ -12,6 +12,7 @@ export class WebhooksController {
 
     @Get('orders/:orderId/settle')
     paymentSettle(@Ctx() ctx: RequestContext, @Param('orderId') orderId: number) {
+        console.log(this.orderService)
         this.orderService.getOrderPayments(ctx, orderId).then(payments => {
             payments.forEach(payment => this.orderService.settlePayment(ctx, payment.id))
         })

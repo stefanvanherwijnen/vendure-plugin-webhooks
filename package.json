@@ -2,11 +2,10 @@
   "name": "vendure-plugin-webhooks",
   "version": "0.1.0",
   "description": "Webhooks plugin for Vendure.io",
-  "main": "dist/index.common.js",
+  "main": "src/index.ts",
   "repository": "https://github.com/simsustech/vendure-plugin-webhooks",
   "author": "Stefan van Herwijnen",
   "license": "MIT",
-  "typings": "dist/types",
   "scripts": {
     "build": "yarn build:src && yarn build:docs",
     "build:src": "rollup --config",
